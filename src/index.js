@@ -28,6 +28,8 @@ chord.third.type = 'sine';
 chord.fifth.type = 'sine';
 chord.seventh.type = 'sine';
 
+
+
 // GIVE THIS CHORD AN AMP!
 chord.first.connect(gainNode);
 chord.third.connect(gainNode);
@@ -129,7 +131,20 @@ let clearMusicArea = () => {
   elem.innerHTML = '';
 }
 
-let makeNewMusicArea = (newRoot) => {
+const playThatNote = (newRoot) => {
+  // set to sine wave
+  chord.first.type = 'sine';
+  chord.first.frequency.value = newRoot.frequency;
+  // Make glorious music!!!! Sort of....
+  // Stop the oscilator in case it's working
+  try {
+    chord.first.start();
+  } catch(err) {
+    console.log('Im tired and I just wanted to practice guitar...');
+  }
+}
+
+const makeNewMusicArea = (newRoot) => {
   // Grab the music area
   let elem = document.getElementById("musicArea");
 
@@ -142,6 +157,8 @@ let makeNewMusicArea = (newRoot) => {
   let textNode = document.createTextNode(newTask);
   firstP.appendChild(textNode);
   elem.appendChild(firstP);
+
+  playThatNote(newRoot);
 }
 
 const updateDomAndMusic = (newRoot) => {
@@ -159,9 +176,28 @@ let newExercise = () => {
   updateDomAndMusic(newRoot);
 }
 
+let silencio = () => {
+  let elem = document.getElementById('mute');
+  console.log('In silencio');
+  console.log(elem);
+  if(elem.class == "") {
+    gainNode.connect(audioCtx.destination);
+    elem.class = "activated";
+    elem.innerHTML = "Click here to mute!";
+  } else {
+    gainNode.disconnect(audioCtx.destination);
+    elem.class = "";    
+    elem.innerHTML = "Click here to unmute!";
+  }
+}
+
 // Click handlers and junk
 let newNote = document.getElementById("newNote");
 newNote.addEventListener("click", newExercise, false);
+
+let muteButton = document.getElementById('mute');
+muteButton.addEventListener("click", silencio, false);
+
 
 let init = () => {
   console.log('Welcome to GuitarPracticer!');
