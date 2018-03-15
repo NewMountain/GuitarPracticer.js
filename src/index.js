@@ -1,12 +1,39 @@
-// NOTE
-
 // So music is a little crazy, there are 12 chromatic notes, 
 // but can be described in a number of overlapping ways
 // Let's see if we can bring some order to the madness.
 
+// Create an audio context
+// There is likely a library for this, but I kind of wanted to see how
+// sound in JS worked, so this is mostly just exploring a new API
+// and likely not "great code"
+// Create an audio context
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// Create a way to make volume
+let gainNode = audioCtx.createGain();
+gainNode.connect(audioCtx.destination)
+
 // We are making a list of 24 notes, this will make sense later
 // when we are making chords
 const notes = R.range(0,24)
+
+// Initiate a chord of oscilators with no pitch
+let chord = { first: audioCtx.createOscillator(), 
+              third: audioCtx.createOscillator(), 
+              fifth: audioCtx.createOscillator(), 
+              seventh: audioCtx.createOscillator()};
+
+// Sine waves are pretty cool
+chord.first.type = 'sine';
+chord.third.type = 'sine';
+chord.fifth.type = 'sine';
+chord.seventh.type = 'sine';
+
+// GIVE THIS CHORD AN AMP!
+chord.first.connect(gainNode);
+chord.third.connect(gainNode);
+chord.fifth.connect(gainNode);
+chord.seventh.connect(gainNode);
+
 
 // Also, we're going to need two octaves of notes. 
 // Source of notes: https://pages.mtu.edu/~suits/notefreqs.html
@@ -95,13 +122,49 @@ const pickRandomRoot = () => {
           }
 }
 
+let clearMusicArea = () => {
+  let elem = document.getElementById("musicArea");
+  // Terrifying how mixed the internet is on whether this 
+  // is a bad way to clear all DOM child elements
+  elem.innerHTML = '';
+}
+
+let makeNewMusicArea = (newRoot) => {
+  // Grab the music area
+  let elem = document.getElementById("musicArea");
+
+  // Generate a random number for the reference fret
+  let newFret = randomIntBetween(13);
+
+  // The dream of the 90s is alive in Portland....and this codebase.
+  let firstP = document.createElement("p");
+  let newTask = `Please play the closest: ${newRoot.writtenNote} at or above the ${newFret} fret.`
+  let textNode = document.createTextNode(newTask);
+  firstP.appendChild(textNode);
+  elem.appendChild(firstP);
+}
+
+const updateDomAndMusic = (newRoot) => {
+  // Step 1 - Clear DOM
+  clearMusicArea();
+  // Step 2 - Put in a new DOM
+  makeNewMusicArea(newRoot);
+}
+
+// I know I am using chord as global state and that's likely not cool. 
+// I'm an Elm dev at heart just treating it as the Model, but I know this is
+// JS and chord is no model. No arrows please.
+let newExercise = () => {
+  let newRoot = pickRandomRoot();
+  updateDomAndMusic(newRoot);
+}
+
+// Click handlers and junk
+let newNote = document.getElementById("newNote");
+newNote.addEventListener("click", newExercise, false);
 
 let init = () => {
-  console.log(notes);
-  console.log(noteToFreq);
-  console.log(freqToNote);
-  console.log(noteToNotation);
-  console.log(pickRandomRoot());
+  console.log('Welcome to GuitarPracticer!');
 }
 
 init();
