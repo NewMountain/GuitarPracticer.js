@@ -67,7 +67,7 @@ const noteToFreq = {
   23: 830.61// G#5/Ab5
 };
 
-// Behold, glorious FP!
+// Behold! Glorious FP!
 const freqToNote = R.map(x => parseInt(x), R.invertObj(noteToFreq));
 
 // More definitions -- Music is weird
