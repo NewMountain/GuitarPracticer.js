@@ -24,3 +24,8 @@ You simply chose a time (in seconds) for you to play to play the chord/arpeggio.
 You can reduce this time as your comping skills approach those of Coltrane. 
 
 :saxophone:
+
+
+### Heads up
+We are importing Ramda from a CDN (https://cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js). It's no big deal, but wanted to be upfront that's how we're getting that wonderful library. If you haven't check out ramda
+[IT WILL CHANGE YOUR LIFE](http://ramdajs.com/)
