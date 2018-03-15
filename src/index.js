@@ -41,10 +41,67 @@ const noteToFreq = {
 // Behold, glorious FP!
 const freqToNote = R.map(x => parseInt(x), R.invertObj(noteToFreq));
 
+// More definitions -- Music is weird
+const noteToNotation = {
+  0: ["A"],
+  1: ["A#", "Bb"],
+  2: ["B"],
+  3: ["C"],
+  4: ["C#", "Db"], 
+  5: ["D"],
+  6: ["D#", "Eb"], 	
+  7: ["E"],
+  8: ["F"],
+  9: ["F#", "Gb"], 	
+  10: ["G"],
+  11: ["G#", "Ab"],
+  12: ["A"],
+  13: ["A#", "Bb"],
+  14: ["B"],
+  15: ["C"],
+  16: ["C#", "Db"],
+  17: ["D"],
+  18: ["D#", "Eb"],
+  19: ["E"],
+  20: ["F"],
+  21: ["F#", "Gb"],
+  22: ["G"],
+  23: ["G#", "Ab"],
+};
+
+// Nice little helper function 
+const randomIntBetween = (to) => Math.floor(Math.random() * to);
+
+// A little wonky, just selecting a randomish number from the length of the list
+// the plucking out the element at that random index
+const pickOne = (stuff) => {
+  return stuff[randomIntBetween(R.length(stuff))]
+}
+
+const translateNoteToWritten = (note) => {
+  let possibleWrittenNotes = noteToNotation[note];
+  return (R.length(possibleWrittenNotes) > 1 ? R.head(possibleWrittenNotes) : pickOne(possibleWrittenNotes));
+}
+
+// Picking a human note from the list
+const pickRandomRoot = () => {
+  // We should only pick a root note from the first octave
+  // This way, we can always build a chord using notes from the next octave up and never
+  // "run out of notes" (from our object above) as we ascend the scale.
+  let note = randomIntBetween(12);
+  return { note: note, 
+           writtenNote: translateNoteToWritten(note),
+           frequency: noteToFreq[note]
+          }
+}
+
+
 let init = () => {
   console.log(notes);
   console.log(noteToFreq);
   console.log(freqToNote);
+  console.log(noteToNotation);
+  console.log(pickRandomRoot());
 }
 
-init()
+init();
