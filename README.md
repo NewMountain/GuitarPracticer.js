@@ -20,7 +20,7 @@ You simply chose a time (in seconds) you have to get the note. You can reduce th
 Randomly generate a chord. The actual chord will play in the background for reference. The intended practice is 
 a chord will randomly select and will play. You will select a reference fret and "play the changes" as they come while
 moving as little as possible from that location.
-You simply chose a time (in seconds) you for the chord to play. 
+You simply chose a time (in seconds) for you to play to play the chord/arpeggio. 
 You can reduce this time as your comping skills approach those of Coltrane. 
 
 :saxophone:
